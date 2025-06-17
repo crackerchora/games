@@ -1,29 +1,31 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Chess Game</title>
+    <title>Simple Chess Game with Ads</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
         }
-        
+
         .chess-container {
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
         }
-        
+
         h1 {
             color: #333;
             margin-bottom: 20px;
         }
-        
+
         #chessboard {
             width: 400px;
             height: 400px;
@@ -33,7 +35,7 @@
             border: 2px solid #333;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
-        
+
         .square {
             width: 100%;
             height: 100%;
@@ -42,36 +44,36 @@
             align-items: center;
             position: relative;
         }
-        
+
         .light {
             background-color: #f0d9b5;
         }
-        
+
         .dark {
             background-color: #b58863;
         }
-        
+
         .piece {
             font-size: 35px;
             font-weight: bold;
             cursor: pointer;
             z-index: 1;
         }
-        
+
         .white {
             color: white;
             text-shadow: 1px 1px 2px #000;
         }
-        
+
         .black {
             color: black;
             text-shadow: 1px 1px 2px #fff;
         }
-        
+
         .selected {
             box-shadow: 0 0 10px 5px rgba(255, 255, 0, 0.7);
         }
-        
+
         .game-info {
             margin-top: 20px;
             padding: 10px;
@@ -79,12 +81,12 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        
+
         #turn-indicator {
             font-weight: bold;
             margin-bottom: 10px;
         }
-        
+
         #reset-btn {
             padding: 8px 16px;
             background-color: #5cb85c;
@@ -97,28 +99,158 @@
     </style>
 </head>
 <body>
-    <div class="chess-container">
+
+<!-- Top Banner Ad -->
+<div style="text-align:center; margin:10px 0;">
+    <script type="text/javascript">
+        atOptions = {
+            'key' : '320f56a3237c4712c5614b237fda24ab',
+            'format' : 'iframe',
+            'height' : 90,
+            'width' : 728,
+            'params' : {}
+        };
+    </script>
+    <script type="text/javascript" src="//margaretnerves.com/320f56a3237c4712c5614b237fda24ab/invoke.js"></script>
+</div>
+
+<div class="chess-container">
+    <div>
         <h1>Simple Chess Game</h1>
         <div id="chessboard"></div>
         <div class="game-info">
             <div id="turn-indicator">White's turn</div>
             <button id="reset-btn">Reset Game</button>
         </div>
+        <div style="margin-top:20px; text-align:center;">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : 'f5886eb990bdd018205d24ac8905345e',
+                    'format' : 'iframe',
+                    'height' : 60,
+                    'width' : 468,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//margaretnerves.com/f5886eb990bdd018205d24ac8905345e/invoke.js"></script>
+        </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const chessboard = document.getElementById('chessboard');
-            const turnIndicator = document.getElementById('turn-indicator');
-            const resetBtn = document.getElementById('reset-btn');
-            
-            // Chess piece Unicode characters
-            const pieces = {
-                'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟',
-                'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔', 'P': '♙'
+    <div style="width:160px;">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : '5b1c3891b0a7bba7b212ad28809aad22',
+                'format' : 'iframe',
+                'height' : 300,
+                'width' : 160,
+                'params' : {}
             };
-            
-            let board = [
+        </script>
+        <script type="text/javascript" src="//margaretnerves.com/5b1c3891b0a7bba7b212ad28809aad22/invoke.js"></script>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const chessboard = document.getElementById('chessboard');
+        const turnIndicator = document.getElementById('turn-indicator');
+        const resetBtn = document.getElementById('reset-btn');
+
+        const pieces = {
+            'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟',
+            'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔', 'P': '♙'
+        };
+
+        let board = [
+            ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
+            ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+            ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
+        ];
+
+        let currentPlayer = 'white';
+        let selectedPiece = null;
+
+        function renderBoard() {
+            chessboard.innerHTML = '';
+
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const square = document.createElement('div');
+                    square.className = `square ${(row + col) % 2 === 0 ? 'light' : 'dark'}`;
+                    square.dataset.row = row;
+                    square.dataset.col = col;
+
+                    const piece = board[row][col];
+                    if (piece) {
+                        const pieceElement = document.createElement('div');
+                        pieceElement.className = `piece ${piece === piece.toUpperCase() ? 'white' : 'black'}`;
+                        pieceElement.textContent = pieces[piece];
+                        pieceElement.dataset.piece = piece;
+                        square.appendChild(pieceElement);
+                    }
+
+                    square.addEventListener('click', () => handleSquareClick(row, col));
+                    chessboard.appendChild(square);
+                }
+            }
+        }
+
+        function handleSquareClick(row, col) {
+            const piece = board[row][col];
+
+            if (!selectedPiece && piece &&
+                ((currentPlayer === 'white' && piece === piece.toUpperCase()) ||
+                    (currentPlayer === 'black' && piece === piece.toLowerCase()))) {
+                selectedPiece = { row, col };
+                highlightSquare(row, col);
+                return;
+            }
+
+            if (selectedPiece) {
+                if (piece &&
+                    ((currentPlayer === 'white' && piece === piece.toUpperCase()) ||
+                        (currentPlayer === 'black' && piece === piece.toLowerCase()))) {
+                    selectedPiece = { row, col };
+                    highlightSquare(row, col);
+                    return;
+                }
+
+                makeMove(selectedPiece.row, selectedPiece.col, row, col);
+                selectedPiece = null;
+                removeHighlights();
+            }
+        }
+
+        function highlightSquare(row, col) {
+            removeHighlights();
+            const square = document.querySelector(`.square[data-row="${row}"][data-col="${col}"]`);
+            if (square && square.firstChild) {
+                square.firstChild.classList.add('selected');
+            }
+        }
+
+        function removeHighlights() {
+            const highlighted = document.querySelectorAll('.selected');
+            highlighted.forEach(el => el.classList.remove('selected'));
+        }
+
+        function makeMove(fromRow, fromCol, toRow, toCol) {
+            board[toRow][toCol] = board[fromRow][fromCol];
+            board[fromRow][fromCol] = '';
+
+            currentPlayer = currentPlayer === 'white' ? 'black' : 'white';
+            turnIndicator.textContent = `${currentPlayer.charAt(0).toUpperCase() + currentPlayer.slice(1)}'s turn`;
+
+            renderBoard();
+        }
+
+        function resetGame() {
+            board = [
                 ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
                 ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
                 ['', '', '', '', '', '', '', ''],
@@ -128,112 +260,16 @@
                 ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
                 ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
             ];
-            
-            let currentPlayer = 'white';
-            let selectedPiece = null;
-            
-            function renderBoard() {
-                chessboard.innerHTML = '';
-                
-                for (let row = 0; row < 8; row++) {
-                    for (let col = 0; col < 8; col++) {
-                        const square = document.createElement('div');
-                        square.className = `square ${(row + col) % 2 === 0 ? 'light' : 'dark'}`;
-                        square.dataset.row = row;
-                        square.dataset.col = col;
-                        
-                        const piece = board[row][col];
-                        if (piece) {
-                            const pieceElement = document.createElement('div');
-                            pieceElement.className = `piece ${piece === piece.toUpperCase() ? 'white' : 'black'}`;
-                            pieceElement.textContent = pieces[piece];
-                            pieceElement.dataset.piece = piece;
-                            square.appendChild(pieceElement);
-                        }
-                        
-                        square.addEventListener('click', () => handleSquareClick(row, col));
-                        chessboard.appendChild(square);
-                    }
-                }
-            }
-            
-            function handleSquareClick(row, col) {
-                const piece = board[row][col];
-                
-                // If no piece is selected and clicked piece belongs to current player
-                if (!selectedPiece && piece && 
-                    ((currentPlayer === 'white' && piece === piece.toUpperCase()) || 
-                     (currentPlayer === 'black' && piece === piece.toLowerCase()))) {
-                    selectedPiece = { row, col };
-                    highlightSquare(row, col);
-                    return;
-                }
-                
-                // If a piece is already selected
-                if (selectedPiece) {
-                    // If clicking on another piece of the same color
-                    if (piece && 
-                        ((currentPlayer === 'white' && piece === piece.toUpperCase()) || 
-                         (currentPlayer === 'black' && piece === piece.toLowerCase()))) {
-                        selectedPiece = { row, col };
-                        highlightSquare(row, col);
-                        return;
-                    }
-                    
-                    // Try to make a move
-                    makeMove(selectedPiece.row, selectedPiece.col, row, col);
-                    selectedPiece = null;
-                    removeHighlights();
-                }
-            }
-            
-            function highlightSquare(row, col) {
-                removeHighlights();
-                const square = document.querySelector(`.square[data-row="${row}"][data-col="${col}"]`);
-                if (square && square.firstChild) {
-                    square.firstChild.classList.add('selected');
-                }
-            }
-            
-            function removeHighlights() {
-                const highlighted = document.querySelectorAll('.selected');
-                highlighted.forEach(el => el.classList.remove('selected'));
-            }
-            
-            function makeMove(fromRow, fromCol, toRow, toCol) {
-                // Simple move logic - in a real game you'd validate the move
-                board[toRow][toCol] = board[fromRow][fromCol];
-                board[fromRow][fromCol] = '';
-                
-                // Switch player
-                currentPlayer = currentPlayer === 'white' ? 'black' : 'white';
-                turnIndicator.textContent = `${currentPlayer.charAt(0).toUpperCase() + currentPlayer.slice(1)}'s turn`;
-                
-                renderBoard();
-            }
-            
-            function resetGame() {
-                board = [
-                    ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
-                    ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
-                    ['', '', '', '', '', '', '', ''],
-                    ['', '', '', '', '', '', '', ''],
-                    ['', '', '', '', '', '', '', ''],
-                    ['', '', '', '', '', '', '', ''],
-                    ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-                    ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
-                ];
-                currentPlayer = 'white';
-                selectedPiece = null;
-                turnIndicator.textContent = "White's turn";
-                renderBoard();
-            }
-            
-            resetBtn.addEventListener('click', resetGame);
-            
-            // Initialize the game
+            currentPlayer = 'white';
+            selectedPiece = null;
+            turnIndicator.textContent = "White's turn";
             renderBoard();
-        });
-    </script>
+        }
+
+        resetBtn.addEventListener('click', resetGame);
+        renderBoard();
+    });
+</script>
+
 </body>
 </html>
